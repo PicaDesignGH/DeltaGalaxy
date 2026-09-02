@@ -1,0 +1,19 @@
+delta-galaxy/
+├── client/
+│   ├── src/
+│   │   ├── components/       # Nav, Hero, ServicesSplit, ScrubVideo, ProjectCarousel, ClientMarquee, Testimonials, Footer
+│   │   ├── assets/            # images, video placeholders
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── vite.config.js
+│   └── package.json
+├── server/
+│   ├── routes/                 # empty for now — add projects.js, contact.js as needed
+│   ├── models/                 # empty for now — Project, Testimonial, ContactSubmission schemas later
+│   ├── index.js
+│   ├── .env
+│   └── package.json
+├── .gitignore
+└── package.json
+
