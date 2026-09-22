@@ -11,25 +11,18 @@ const Preloader = ({ onComplete }) => {
       onComplete: () => onComplete?.(),
     })
 
-    // Breathing pulse on the logo — repeats a few times within the load window
     tl.to(logoRef.current, {
+      y: 0,            // slides up into the center
       opacity: 1,
-      duration: 0.4,
-      ease: 'power2.out',
+      duration: 0.9,
+      ease: 'back.out(1.6)',  // slight overshoot/bounce at the end
     })
-      .to(logoRef.current, {
-        opacity: 0.35,
-        duration: 0.4,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: 3,
-      })
-      // Exit: whole screen fades out
+      // the moment the logo is fully centered, exit
       .to(containerRef.current, {
         opacity: 0,
-        duration: 0.4,
+        duration: 0.5,
         ease: 'power2.inOut',
-      })
+      }, '+=0.2') // small pause so it doesn't cut instantly
 
     return () => tl.kill()
   }, [onComplete])
@@ -37,16 +30,16 @@ const Preloader = ({ onComplete }) => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FAEBD7]"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#FDFCF9]"
     >
       <img
         ref={logoRef}
         src={logo}
         alt="Delta Galaxy"
-        className="w-30 h-30 opacity-0"
+        className="w-58 h-36 opacity-0 translate-y-24"
       />
     </div>
   )
 }
 
-export default Preloader;
+export default Preloader
