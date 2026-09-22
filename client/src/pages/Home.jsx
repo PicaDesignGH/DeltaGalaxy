@@ -63,8 +63,22 @@ const Home = () => {
 
   const [testiIndex, setTestiIndex] = useState(0)
 
-  const visibleCount = 3
+  const getVisibleCount = () =>
+    window.innerWidth < 640 ? 1 : window.innerWidth < 1024 ? 2 : 3
+
+  const [visibleCount, setVisibleCount] = useState(getVisibleCount)
+
   const maxIndex = testimonials.length - visibleCount
+
+  useEffect(() => {
+    const handleResize = () => {
+      const count = getVisibleCount()
+      setVisibleCount(count)
+      setTestiIndex((i) => Math.min(i, testimonials.length - count))
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const goTestimonial = (direction) => {
     setTestiIndex((prev) =>
@@ -166,37 +180,22 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#12181C]/70 via-[#12181C]/20 to-[#12181C]/85" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pb-20 w-[95%]">
-          <h1 className="text-4xl md:text-6xl font-semibold leading-[1.05] max-w-2xl">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pb-28 md:pb-32 w-[95%]">
+          <h1 className="text-5xl md:text-7xl leading-[1.05] max-w-3xl font-lato font-semibold">
             Infrastructure and mineral resources, engineered for scale.
           </h1>
-          <p className="mt-6 max-w-md text-[#F6F2E9]/80">
+          <p className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-[#F6F2E9]/80">
             We plan, build and operate the roads, structures and mining assets
             that regional growth is built on — from first survey to final handover.
           </p>
-          <div className="flex gap-4 mt-9">
-            <Link to="/projects" className="px-6 py-3.5 bg-[#A85A28] hover:bg-[#C97A3E] transition-colors text-sm font-semibold">
+          <div className="flex flex-wrap gap-5 mt-12">
+            <Link to="/projects" className="px-8 py-4 bg-[#A85A28] hover:bg-[#C97A3E] transition-colors text-base font-semibold">
               View our projects
             </Link>
-            <Link to="/contact" className="px-6 py-3.5 border border-[#F6F2E9]/40 hover:border-[#F6F2E9] transition-colors text-sm font-semibold">
+            <Link to="/contact" className="px-8 py-4 border border-[#F6F2E9]/40 hover:border-[#F6F2E9] transition-colors text-base font-semibold">
               Talk to our team
             </Link>
           </div>
-        </div>
-
-        {/* Stat strip */}
-        <div className="relative z-10 border-t border-[#F6F2E9]/15 mt-14 grid grid-cols-2 md:grid-cols-4 max-w-6xl mx-auto w-full">
-          {[
-            ['15+', 'Years in infrastructure & mining'],
-            ['60+', 'Projects delivered'],
-            ['8', 'States of operation'],
-            ['1,200+', 'People on active sites'],
-          ].map(([num, label]) => (
-            <div key={label} className="px-6 py-7 border-r border-[#F6F2E9]/15 last:border-r-0">
-              <p className="text-2xl md:text-3xl font-semibold">{num}</p>
-              <p className="text-xs text-[#F6F2E9]/60 mt-1">{label}</p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -225,11 +224,11 @@ const Home = () => {
           ))}
         </div>
 
-        <p className="relative text-[#A85A28] text-xl font-semibold tracking-wide mb-5">
+        <p className="relative text-[#A85A28] text-xl font-semibold tracking-wide mb-5 font-sora">
           About Delta Galaxy
         </p>
 
-        <h2 className="relative text-3xl md:text-5xl font-semibold leading-tight mb-3">
+        <h2 className="relative text-3xl md:text-5xl font-semibold leading-tight mb-3 font-sora">
           Welcome to <span className="text-[#A85A28]">Delta Galaxy</span>
         </h2>
 
@@ -270,10 +269,10 @@ const Home = () => {
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-6">
             <span className="w-1 h-5 bg-[#A85A28]" />
-            <p className="text-sm font-semibold tracking-wide text-[#F6F2E9]/80">WHY CHOOSE US</p>
+            <p className="text-sm font-semibold tracking-wide text-[#F6F2E9]/80 font-lato">WHY CHOOSE US</p>
           </div>
 
-          <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-16 max-w-2xl">
+          <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-16 max-w-2xl font-lato">
             Building trust through<br />
             <span className="text-[#C97A3E]">quality and experience</span>
           </h2>
@@ -296,7 +295,7 @@ const Home = () => {
 
 		{/* ---------------- CLIENTS MARQUEE ---------------- */}
 		<section className="border-t border-b border-[#DDD2BE] py-12 overflow-hidden">
-			<p className="max-w-6xl mx-auto px-4 text-[#A85A28] text-xl font-semibold tracking-wide mb-14">
+			<p className="max-w-6xl mx-auto px-4 text-[#A85A28] text-xl font-semibold tracking-wide mb-14 font-lato">
 				Our Happy Clients
 			</p>
 
@@ -339,201 +338,217 @@ const Home = () => {
 		</section>
 
       {/* ---------------- TESTIMONIALS ---------------- */}
-    <section className="border-t border-[#DDD2BE] py-28 overflow-hidden">
+   <section className="border-t border-[#DDD2BE] py-16 md:py-28 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex items-end justify-between mb-10 md:mb-16">
           <div>
-            <p className="text-[#A85A28] text-xl font-semibold mb-3">Testimonials</p>
-            <h2 className="text-3xl md:text-4xl font-semibold">What Our Clients Say</h2>
+            <p className="text-[#A85A28] text-lg md:text-xl font-semibold mb-3 font-lato">Testimonials</p>
+            <h2 className="text-2xl md:text-4xl font-semibold font-lato">What Our Clients Say</h2>
           </div>
-          <div className="hidden md:flex gap-3">
+          <div className="flex gap-3">
             <button
               onClick={() => goTestimonial(-1)}
               disabled={testiIndex === 0}
-              className="w-11 h-11 rounded-full border border-[#12181C] flex items-center justify-center hover:bg-[#12181C] hover:text-[#F6F2E9] transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#12181C]"
+              className="w-10 h-10 md:w-11 md:h-11 rounded-full border border-[#12181C] flex items-center justify-center hover:bg-[#12181C] hover:text-[#F6F2E9] transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#12181C]"
             >
               <ArrowLeft size={18} />
             </button>
             <button
               onClick={() => goTestimonial(1)}
               disabled={testiIndex === maxIndex}
-              className="w-11 h-11 rounded-full border border-[#12181C] flex items-center justify-center hover:bg-[#12181C] hover:text-[#F6F2E9] transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#12181C]"
+              className="w-10 h-10 md:w-11 md:h-11 rounded-full border border-[#12181C] flex items-center justify-center hover:bg-[#12181C] hover:text-[#F6F2E9] transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-[#12181C]"
             >
               <ArrowRight size={18} />
             </button>
           </div>
         </div>
 
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${testiIndex * (100 / visibleCount)}%)` }}
-            >
-              {testimonials.map((t) => (
-                <div key={t.name} className="w-full md:w-1/3 shrink-0 pr-10">
-                  <h3 className="font-semibold text-lg mb-4">{t.title}</h3>
-                  <p className="text-[#4B5459] mb-6">{t.quote}</p>
-                  <p className="font-semibold">{t.name}</p>
-                  <p className="text-sm text-[#4B5459]/70">{t.role}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Dots */}
-          <div className="flex gap-2 mt-10">
-            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setTestiIndex(i)}
-                className={`h-2 rounded-full transition-all ${
-                  i === testiIndex ? 'w-6 bg-[#A85A28]' : 'w-2 bg-[#DDD2BE]'
-                }`}
-                aria-label={`Go to testimonial set ${i + 1}`}
-              />
+        <div className="overflow-hidden -mr-6 md:-mr-10">
+          <div
+            className="flex transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${testiIndex * (100 / visibleCount)}%)` }}
+          >
+            {testimonials.map((t) => (
+              <div key={t.name} className="w-full sm:w-1/2 lg:w-1/3 shrink-0 pr-6 md:pr-10">
+                <h3 className="font-semibold text-base md:text-lg mb-3 md:mb-4">{t.title}</h3>
+                <p className="text-[#4B5459] text-sm md:text-base mb-5 md:mb-6">{t.quote}</p>
+                <p className="font-semibold text-sm md:text-base">{t.name}</p>
+                <p className="text-xs md:text-sm text-[#4B5459]/70">{t.role}</p>
+              </div>
             ))}
           </div>
         </div>
+
+        {/* Dots */}
+        <div className="flex gap-2 mt-8 md:mt-10">
+          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setTestiIndex(i)}
+              className={`h-2 rounded-full transition-all ${
+                i === testiIndex ? 'w-6 bg-[#A85A28]' : 'w-2 bg-[#DDD2BE]'
+              }`}
+              aria-label={`Go to testimonial set ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
       </section>
 
       {/* ---------------- CAPABILITIES ACCORDION ---------------- */}
-      <section className="max-w-6xl mx-auto px-6 py-28">
-        <div className="grid md:grid-cols-2 gap-14 items-start">
-          <div className="h-[420px] md:h-[520px] sticky top-24">
-            <img
-              src="https://deltagalaxy.com/wp-content/uploads/2024/03/home-faq.png"
-              alt="Delta Galaxy site team"
-              className="w-full h-10/12 object-cover"
-            />
-          </div>
+      <section className="max-w-3xl mx-auto px-6 py-28">
+        {/* Heading block */}
+        <div className="text-center mb-14">
+          <span className="inline-block px-4 py-1.5 rounded-full border border-[#A85A28]/40 text-[#A85A28] text-sm font-semibold tracking-wide mb-6 font-lato">
+            Why Delta Galaxy
+          </span>
+          <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4 font-lato">
+            What sets us apart
+          </h2>
+          <p className="text-[#4B5459] max-w-xl mx-auto">
+            The principles behind every road, structure and mining asset we deliver.
+          </p>
+        </div>
 
-          <div>
-            {capabilities.map((item, index) => {
-              const isOpen = openCapability === index
+        {/* Accordion */}
+        <div>
+          {capabilities.map((item, index) => {
+            const isOpen = openCapability === index
 
-              return (
-                <div
-                  key={item.title}
-                  className="border border-[#DDD2BE] rounded-xl px-6 mb-4"
+            return (
+              <div
+                key={item.title}
+                className={`bg-white/30 rounded-xl px-6 mb-4 transition-all duration-300 ${
+                  isOpen
+                    ? 'shadow-md border border-[#DDD2BE]'
+                    : 'shadow-sm border border-transparent hover:border-[#DDD2BE]'
+                }`}
+              >
+                <button
+                  onClick={() => toggleCapability(index)}
+                  className="w-full flex items-center justify-between gap-6 py-6 text-left"
                 >
-                  <button
-                    onClick={() => toggleCapability(index)}
-                    className="w-full flex items-center justify-between gap-6 py-6 text-left"
-                  >
-                    <h3 className="text-xl md:text-2xl font-semibold">
-                      {item.title}
-                    </h3>
+                  <h3 className="text-lg md:text-xl font-semibold">
+                    {item.title}
+                  </h3>
 
-                    <span className="shrink-0 w-9 h-9 rounded-full border border-[#F98D21] flex items-center justify-center text-[#12181C]">
-                      {isOpen ? <Minus size={18} /> : <Plus size={18} />}
-                    </span>
-                  </button>
-
-                  <div
-                    className={`grid transition-all duration-500 ease-out ${
+                  <span
+                    className={`shrink-0 w-9 h-9 rounded-full border flex items-center justify-center transition-colors duration-300 ${
                       isOpen
-                        ? 'grid-rows-[1fr] opacity-100 pb-6'
-                        : 'grid-rows-[0fr] opacity-0'
+                        ? 'border-[#A85A28] bg-[#A85A28] text-[#F6F2E9]'
+                        : 'border-[#F98D21] text-[#12181C]'
                     }`}
                   >
-                    <div className="overflow-hidden">
-                      <p className="text-[#4B5459] max-w-md">
-                        {item.description}
-                      </p>
-                    </div>
+                    {isOpen ? <Minus size={18} /> : <Plus size={18} />}
+                  </span>
+                </button>
+
+                <div
+                  className={`grid transition-all duration-500 ease-out ${
+                    isOpen
+                      ? 'grid-rows-[1fr] opacity-100 pb-6'
+                      : 'grid-rows-[0fr] opacity-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <p className="text-[#4B5459] leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
         </div>
       </section>
 
       {/* ---------------- MEDIA / EVENT COVERAGE ---------------- */}
-      <section className="max-w-6xl mx-auto px-6 py-28">
-        <div className="mb-12 max-w-3xl">
-          <p className="text-[#A85A28] text-xl font-semibold tracking-wide mb-4">
-            In the spotlight
-          </p>
+      <div className="border-t-2 border-[#DDD2BE]">
+        <section className="max-w-6xl mx-auto px-6 py-28">
+          <div className="mb-12 max-w-3xl">
+            <p className="text-[#A85A28] text-xl font-semibold tracking-wide mb-4 font-lato">
+              In the spotlight
+            </p>
 
-          <h2 className="text-2xl md:text-3xl font-semibold leading-snug">
-            <span className="text-[#FF8C00]">
-              Delta Galaxy Engineering Services
-            </span>{" "}
-            billboards at the India–South Africa match in Ranchi on 30 November
-            2025
-          </h2>
-        </div>
-
-        {/* Gallery */}
-        <div className="grid md:grid-cols-3 gap-3 h-[560px] bg-[#FAEBD7] p-5 rounded-2xl">
-
-          {/* Left column */}
-          <div className="grid grid-rows-2 gap-3 min-h-0">
-
-            <div className="overflow-hidden min-h-0">
-              <img
-                src="https://deltagalaxy.com/wp-content/uploads/2025/12/WhatsApp-Image-2025-12-04-at-5.07.17-PM-1.jpeg"
-                alt="Delta Galaxy billboard at stadium"
-                className="w-full h-full object-cover block"
-              />
-            </div>
-
-            <div className="overflow-hidden min-h-0">
-              <img
-                src="https://deltagalaxy.com/wp-content/uploads/2025/12/image1.png"
-                alt="Stadium crowd view"
-                className="w-full h-full object-cover block"
-              />
-            </div>
-
+            <h2 className="text-2xl md:text-3xl font-semibold leading-snug font-lato">
+              <span className="text-[#FF8C00]">
+                Delta Galaxy Engineering Services
+              </span>{" "}
+              billboards at the India–South Africa match in Ranchi on 30 November
+              2025
+            </h2>
           </div>
 
-          {/* Right side */}
-          <div className="md:col-span-2 grid grid-rows-2 gap-3 min-h-0">
+          {/* Gallery */}
+          <div className="grid md:grid-cols-3 gap-3 h-[560px] bg-[#FAEBD7] p-5 rounded-2xl">
 
-            {/* Top wide image */}
-            <div className="overflow-hidden min-h-0">
-              <img
-                src="https://deltagalaxy.com/wp-content/uploads/2025/12/WhatsApp-Image-2025-12-04-at-5.10.38-PM.jpeg"
-                alt="Players on the field with Delta Galaxy billboard"
-                className="w-full h-full object-fill block"
-              />
-            </div>
+            {/* Left column */}
+            <div className="grid grid-rows-2 gap-3 min-h-0">
 
-            {/* Bottom row */}
-            <div className="grid grid-cols-2 gap-3 min-h-0">
-
-              {/* Quote card */}
-              <div className="relative bg-[#12181C] text-[#F6F2E9] p-8 flex flex-col justify-center overflow-hidden">
-                <Quote
-                  size={28}
-                  className="relative z-10 text-[#F98D21] mb-4"
-                />
-
-                <p className="relative z-10 text-xl md:text-2xl font-semibold text-[#F6F2E9] leading-snug">
-                  Cheering Loudest
-                </p>
-
-                <p className="relative z-10 text-[#F6F2E9]/70">
-                  next to the scoreboard
-                </p>
-              </div>
-
-              {/* Scorecard image */}
               <div className="overflow-hidden min-h-0">
                 <img
-                  src="https://deltagalaxy.com/wp-content/uploads/2025/12/IMAGE2.png"
-                  alt="Scoreboard with Delta Galaxy branding"
+                  src="https://deltagalaxy.com/wp-content/uploads/2025/12/WhatsApp-Image-2025-12-04-at-5.07.17-PM-1.jpeg"
+                  alt="Delta Galaxy billboard at stadium"
+                  className="w-full h-full object-cover block"
+                />
+              </div>
+
+              <div className="overflow-hidden min-h-0">
+                <img
+                  src="https://deltagalaxy.com/wp-content/uploads/2025/12/image1.png"
+                  alt="Stadium crowd view"
                   className="w-full h-full object-cover block"
                 />
               </div>
 
             </div>
-          </div>
 
-        </div>
-      </section>
+            {/* Right side */}
+            <div className="md:col-span-2 grid grid-rows-2 gap-3 min-h-0">
+
+              {/* Top wide image */}
+              <div className="overflow-hidden min-h-0">
+                <img
+                  src="https://deltagalaxy.com/wp-content/uploads/2025/12/WhatsApp-Image-2025-12-04-at-5.10.38-PM.jpeg"
+                  alt="Players on the field with Delta Galaxy billboard"
+                  className="w-full h-full object-fill block"
+                />
+              </div>
+
+              {/* Bottom row */}
+              <div className="grid grid-cols-2 gap-3 min-h-0">
+
+                {/* Quote card */}
+                <div className="relative bg-[#12181C] text-[#F6F2E9] p-8 flex flex-col justify-center overflow-hidden">
+                  <Quote
+                    size={28}
+                    className="relative z-10 text-[#F98D21] mb-4"
+                  />
+
+                  <p className="relative z-10 text-xl md:text-2xl font-semibold text-[#F6F2E9] leading-snug">
+                    Cheering Loudest
+                  </p>
+
+                  <p className="relative z-10 text-[#F6F2E9]/70">
+                    next to the scoreboard
+                  </p>
+                </div>
+
+                {/* Scorecard image */}
+                <div className="overflow-hidden min-h-0">
+                  <img
+                    src="https://deltagalaxy.com/wp-content/uploads/2025/12/IMAGE2.png"
+                    alt="Scoreboard with Delta Galaxy branding"
+                    className="w-full h-full object-cover block"
+                  />
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
 
       {/* ---------------- CTA BAND ---------------- */}
       {/*<section className="bg-[#3E5F56] text-[#F6F2E9] py-20">
@@ -547,9 +562,9 @@ const Home = () => {
         </div>
       </section>*/}
 
-      <section className="bg-[#3E5F56] text-[#F6F2E9] py-24 text-center">
+      <section className="bg-gray-600 text-[#F6F2E9] py-24 text-center">
         <div className="max-w-2xl mx-auto px-6">
-          <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4">
+          <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4 font-lato">
             <span className="text-[#F6F2E9]">Start Building</span>
             <br />
             <span className="text-[#C97A3E]">With Confidence</span>
@@ -573,4 +588,5 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Home;
+
